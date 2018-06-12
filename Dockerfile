@@ -4,8 +4,9 @@ FROM python:2-alpine
 RUN apk update && \
 	apk --no-cache add tini gcc musl-dev
 
-RUN addgroup -g 1001 pdfy && \
-    adduser -D -u 1001 -G pdfy pdfy
+RUN set -x \
+	&& addgroup -g 82 -S www-data \
+	&& adduser -u 82 -D -S -G www-data www-data
 
 COPY . /app
 
@@ -27,9 +28,9 @@ RUN tar xzvf /app/phantomjs.tar.gz -C /tmp/ && \
 
 RUN mkdir -p /storage
 
-RUN chown -R pdfy:pdfy /usr/local/ /app /storage
+RUN chown -R www-data:www-data /usr/local/ /app /storage
 
-USER pdfy
+USER www-data
 
 RUN pip install -r /app/requirements.txt && \
    cd /app && \
