@@ -17,12 +17,12 @@ class Utils():
 		self.driver = webdriver.PhantomJS(
 			'phantomjs', service_args=["--local-storage-path=" + self.paths["localstorage"]])
 
-	def multiDownload(self, urls, path, orientation):
+	def multiDownload(self, urls, path, orientation, paper_format):
 		count = 1
 		tmp_files = []
 
 		for url in urls:
-			file_path = self.download(url, path + '/' + str(count) + '.pdf', orientation)
+			file_path = self.download(url, path + '/' + str(count) + '.pdf', orientation, paper_format)
 			if not os.path.isfile(file_path):
 				raise OSError("System can't create file " + self.paths["tmp"])
 			count += 1
@@ -30,7 +30,7 @@ class Utils():
 
 		return tmp_files
 
-	def download(self, url, target_path, orientation):
+	def download(self, url, target_path, orientation, paper_format):
 		status_code = requests.get(url).status_code
 		if status_code != 200:
 			raise IOError("Request to url '" + url +
@@ -41,8 +41,12 @@ class Utils():
 		# hack while the python interface lags
 		self.driver.command_executor._commands['executePhantomScript'] = (
 			'POST', '/session/$sessionId/phantom/execute')
-		#orientation = 'portrait', 'landscape'
-		page_format = 'this.paperSize = {{format: \"A4\", orientation: \"{}\" }};'.format(orientation)
+		if paper_format in ['A4','A3','A5','Legal','Letter','Tabloid']:
+			page_format = 'this.paperSize = {{ format: \"{}\", orientation: \"{}\" }};'.format(paper_format, orientation)
+		else:
+			paper_format = paper_format.split('x')
+			page_format = 'this.paperSize = {{ width: \"{}\", height: \"{}\" }};'.format(paper_format[0], paper_format[1])
+
 
 		self.driver.execute('executePhantomScript', {
 		                    'script': page_format, 'args': []})

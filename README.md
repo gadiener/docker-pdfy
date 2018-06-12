@@ -18,7 +18,7 @@ version: '3'
 
 services:
     pdfy:
-        image: caffeina/pdfy:1.0.1
+        image: caffeina/pdfy:1.0.4
         restart: always
         volumes:
             - pdf-data:/storage
@@ -26,7 +26,7 @@ services:
             - 80:8080
 
     awssync:
-        image: caffeina/awssync:1.0.1
+        image: caffeina/awssync:1
         restart: always
         volumes:
             - pdf-data:/storage
@@ -68,6 +68,7 @@ $ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&or
 - **urls:** Urls to trasform in pdf pages *(required)*
 - **name:** Name of pdf without extension *(required)*
 - **orientation:** Can be portrait or landscape *(optional, default=`portrait`)*
+- **paper:** Can be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px. Ex. 10cmx15.5cm *(optional, default=`A4`)*
 
 ## Delete all pdfs
 

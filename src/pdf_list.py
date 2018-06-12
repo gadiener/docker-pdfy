@@ -16,7 +16,19 @@ class PdfList(Resource):
 		self.parser.add_argument(
 			'name', type=inputs.regex('^[0-9a-zA-Z-_]+$'), help='File name is invalid', required=True)
 		self.parser.add_argument(
-			'orientation', choices=('portrait', 'landscape'), help='Orientation it must be portrait or landscape', default='portrait', store_missing=True)
+			'orientation',
+			choices=('portrait', 'landscape'),
+			help='The orientation field must be portrait or landscape',
+			default='portrait',
+			tore_missing=True
+		)
+		self.parser.add_argument(
+			'paper',
+			type=inputs.regex('^(A4|A3|A5|Legal|Letter|Tabloid|([0-9]+\.?[0-9]*(mm|cm|in|px))x([0-9]+\.?[0-9]*(mm|cm|in|px)))$'),
+			help='The paper field must be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px',
+			default='A4',
+			store_missing=True
+		)
 		# Not implemented
 		self.parser.add_argument(
 			'path', type=inputs.regex('^[0-9a-zA-Z-_\/]+$'), help='Path is invalid', required=False)
@@ -45,7 +57,7 @@ class PdfList(Resource):
 			if self.utils.deleteAllFileInDir(path):
 				os.rmdir(path)
 
-			tmp_files = self.utils.multiDownload(args.urls, path, args.orientation)
+			tmp_files = self.utils.multiDownload(args.urls, path, args.orientation, args.paper)
 
 			merged_path = self.utils.pdfMerge(
 				tmp_files, path + '/merged.pdf')
