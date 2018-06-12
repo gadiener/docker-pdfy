@@ -20,7 +20,7 @@ class PdfList(Resource):
 			choices=('portrait', 'landscape'),
 			help='The orientation field must be portrait or landscape',
 			default='portrait',
-			tore_missing=True
+			store_missing=True
 		)
 		self.parser.add_argument(
 			'paper',
