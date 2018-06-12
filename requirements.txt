@@ -1,0 +1,7 @@
+flask==0.12.2
+flask_restful==0.3.6
+selenium==3.9.0
+pathlib==1.0.1
+PyPDF2==1.26.0
+gevent==1.2.2
+requests==2.18.4

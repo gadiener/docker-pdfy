@@ -1,0 +1,9 @@
+.DS_Store
+app.sublime-project
+app.sublime-workspace
+.vscode
+
+# py byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

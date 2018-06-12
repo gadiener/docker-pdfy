@@ -1,0 +1,24 @@
+version: '3'
+
+volumes:
+  pdf-data:
+
+services:
+  pdfy:
+    image: caffeina/pdfy:1
+    restart: always
+    volumes:
+      - pdf-data:/storage
+    ports:
+      - 8080:80
+
+  awssync:
+    image: caffeina/awssync:1
+    restart: always
+    volumes:
+      - pdf-data:/storage
+    environment:
+      AWS_BUCKET_SYNC_DIR: "pdf"
+      AWS_BUCKET: "mybucket"
+      AWS_ACCESS_KEY_ID: "myawskey"
+      AWS_SECRET_ACCESS_KEY: "************************"
