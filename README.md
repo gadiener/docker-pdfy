@@ -51,38 +51,38 @@ $ docker-compose up
 
 ## API
 
-## Get pdf list
+### Get pdf list
 
 ```bash
 $ curl http://localhost/
 ```
 
-## Generate new pdf
+### Generate new pdf
 
 ```bash
-$ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&orientation=portrait" http://localhost/
+$ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&orientation=portrait&paper=10cmx15.5cm" http://localhost/
 ```
 
-### Parameters
+#### Parameters
 
 - **urls:** Urls to trasform in pdf pages *(required)*
 - **name:** Name of pdf without extension *(required)*
 - **orientation:** Can be portrait or landscape *(optional, default=`portrait`)*
-- **paper:** Can be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px. Ex. 10cmx15.5cm *(optional, default=`A4`)*
+- **paper:** Can be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px. For Example 10cmx15.5cm *(optional, default=`A4`)*
 
-## Delete all pdfs
+### Delete all pdfs
 
 ```bash
 $ curl -X DELETE http://localhost/
 ```
 
-## Delete a pdf
+### Delete a pdf
 
 ```bash
 $ curl -X DELETE http://localhost/{pdf-name}
 ```
 
-## Get pdf
+### Get pdf
 
 ```bash
 $ curl http://localhost/{pdf-name}
