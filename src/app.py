@@ -19,8 +19,8 @@ opt = {
 }
 
 def main():
-	WSGIServer((opt["host"], opt["port"]), application=app).serve_forever()
-	#app.run(host=opt["host"], port=opt["port"], debug=True)
+	#WSGIServer((opt["host"], opt["port"]), application=app).serve_forever()
+	app.run(host=opt["host"], port=opt["port"], debug=True)
 
 if __name__ == '__main__':
 	main()

@@ -18,7 +18,7 @@ version: '3'
 
 services:
     pdfy:
-        image: caffeina/pdfy:1.0.4
+        image: caffeina/pdfy:1.0.5
         restart: always
         volumes:
             - pdf-data:/storage
