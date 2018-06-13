@@ -22,8 +22,6 @@ services:
         restart: always
         volumes:
             - pdf-data:/storage
-        ports:
-            - 80:8080
 
     awssync:
         image: caffeina/awssync:1
@@ -91,10 +89,9 @@ $ curl http://localhost/{pdf-name}
 ## Todo
 
 - Improve documentation;
-- add `USER` instruction in dockerfile;
+- Upgrade to python 3;
 - Use Chrome Headless instead of PhantomJS;
 - Add request throttling and authentication;
-- Add other page format (now is available only A4);
 - Add async mode and request queue.
 
 
