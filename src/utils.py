@@ -44,7 +44,7 @@ class Utils():
 		if paper_format in ['A4','A3','A5','Legal','Letter','Tabloid']:
 			page_format = 'this.paperSize = {{ format: \"{}\", orientation: \"{}\" }};'.format(paper_format, orientation)
 		else:
-			paper_format = paper_format.split('x')
+			paper_format = paper_format.split('X')
 			page_format = 'this.paperSize = {{ width: \"{}\", height: \"{}\" }};'.format(paper_format[0], paper_format[1])
 
 
