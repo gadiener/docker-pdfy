@@ -24,7 +24,7 @@ class PdfList(Resource):
 		)
 		self.parser.add_argument(
 			'paper',
-			type=inputs.regex('^(A4|A3|A5|Legal|Letter|Tabloid|([0-9]+\.?[0-9]*(mm|cm|in|px))x([0-9]+\.?[0-9]*(mm|cm|in|px)))$'),
+			type=inputs.regex('^(A4|A3|A5|Legal|Letter|Tabloid|([0-9]+\.?[0-9]*(mm|cm|in|px))X([0-9]+\.?[0-9]*(mm|cm|in|px)))$'),
 			help='The paper field must be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px',
 			default='A4',
 			store_missing=True
