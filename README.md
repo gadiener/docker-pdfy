@@ -58,7 +58,7 @@ $ curl http://localhost/
 ### Generate new pdf
 
 ```bash
-$ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&orientation=portrait&paper=10cmX15.5cm" http://localhost/
+$ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&orientation=portrait&paper=10cmX15.5cm&fit=Letter" http://localhost/
 ```
 
 #### Parameters
@@ -66,7 +66,8 @@ $ curl -X POST -d "urls=https://google.it&urls=https://google.com&name=google&or
 - **urls:** Urls to trasform in pdf pages *(required)*
 - **name:** Name of pdf without extension *(required)*
 - **orientation:** Can be portrait or landscape *(optional, default=`portrait`)*
-- **paper:** Can be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px. For Example 10cmX15.5cm *(optional, default=`A4`)*
+- **paper:** Can be one of the following A3, A4, A5, Legal, Letter or page size in mm, cm, in or px. For Example 10cmX15.5cm *(optional, default=`A4`)*
+- **fit:** Can be one of the following A3, A4, A5, Legal, Letter or page size in mm, cm, in or pt. Set it to false to disable this feature. For Example 10cmX15.5cm *(optional, default=`false`)*
 
 ### Delete all pdfs
 

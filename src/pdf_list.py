@@ -12,9 +12,17 @@ class PdfList(Resource):
 
 		self.parser = reqparse.RequestParser()
 		self.parser.add_argument(
-			'urls', action='append', help='Input URLs are invalid', required=True)
+			'urls',
+			action='append',
+			help='Input URLs are invalid',
+			required=True
+		)
 		self.parser.add_argument(
-			'name', type=inputs.regex('^[0-9a-zA-Z-_]+$'), help='File name is invalid', required=True)
+			'name',
+			type=inputs.regex('^[0-9a-zA-Z-_]+$'),
+			help='File name is invalid',
+			required=True
+		)
 		self.parser.add_argument(
 			'orientation',
 			choices=('portrait', 'landscape'),
@@ -24,14 +32,25 @@ class PdfList(Resource):
 		)
 		self.parser.add_argument(
 			'paper',
-			type=inputs.regex('^(A4|A3|A5|Legal|Letter|Tabloid|([0-9]+\.?[0-9]*(mm|cm|in|px))X([0-9]+\.?[0-9]*(mm|cm|in|px)))$'),
-			help='The paper field must be one of the following A3, A4, A5, Legal, Letter, Tabloid or page size in mm, cm, in or px',
+			type=inputs.regex('^(A4|A3|A5|Legal|Letter|([0-9]+\.?[0-9]*(mm|cm|in|px))X([0-9]+\.?[0-9]*(mm|cm|in|px)))$'),
+			help='The paper field must be one of the following A3, A4, A5, Legal, Letter or page size in mm, cm, in or px',
 			default='A4',
+			store_missing=True
+		)
+		self.parser.add_argument(
+			'fit',
+			type=inputs.regex('^(false|0|A4|A3|A5|Legal|Letter|([0-9]+\.?[0-9]*(mm|cm|in|pt))X([0-9]+\.?[0-9]*(mm|cm|in|pt)))$'),
+			help='The fit field must be one of the following A3, A4, A5, Legal, Letter or page size in mm, cm, in or pt. Set it to false to disable this feature.',
+			default='false',
 			store_missing=True
 		)
 		# Not implemented
 		self.parser.add_argument(
-			'path', type=inputs.regex('^[0-9a-zA-Z-_\/]+$'), help='Path is invalid', required=False)
+			'path',
+			type=inputs.regex('^[0-9a-zA-Z-_\/]+$'),
+			help='Path is invalid',
+			required=False
+		)
 
 		super(PdfList, self).__init__()
 
@@ -57,18 +76,32 @@ class PdfList(Resource):
 			if self.utils.deleteAllFileInDir(path):
 				os.rmdir(path)
 
-			tmp_files = self.utils.multiDownload(args.urls, path, args.orientation, args.paper)
+			tmp_files = self.utils.multiDownload(
+				args.urls,
+				path,
+				args.orientation,
+				args.paper
+			)
 
-			merged_path = self.utils.pdfMerge(
-				tmp_files, path + '/merged.pdf')
+			temp_path = self.utils.pdfMerge(
+				tmp_files,
+				path + '/merged.pdf'
+			)
 
-			final_path = self.utils.pdfCompress(merged_path, final_path)
+			if not (args.fit == 'false' or args.fit == '0'):
+				temp_path = self.utils.pdfScaleToFit(
+					temp_path,
+					path + '/fitted.pdf',
+					args.fit,
+					args.orientation
+				)
+
+			final_path = self.utils.pdfCompress(temp_path, final_path)
 
 			return {
 				"status": status,
 				"name": args.name + '.pdf',
 				"path": final_path,
-				"pages": self.utils.countPdfPages(final_path),
 				"urls": args.urls
 			}
 		except OSError, ex:

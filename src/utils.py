@@ -1,9 +1,7 @@
 import os
-import re
 import subprocess
 import requests
 from shutil import move
-from PyPDF2 import PdfFileMerger
 from selenium import webdriver
 
 class Utils():
@@ -15,7 +13,9 @@ class Utils():
 		}
 
 		self.driver = webdriver.PhantomJS(
-			'phantomjs', service_args=["--local-storage-path=" + self.paths["localstorage"]])
+			'phantomjs',
+			service_args=["--local-storage-path=" + self.paths["localstorage"]]
+		)
 
 	def multiDownload(self, urls, path, orientation, paper_format):
 		count = 1
@@ -40,8 +40,11 @@ class Utils():
 
 		# hack while the python interface lags
 		self.driver.command_executor._commands['executePhantomScript'] = (
-			'POST', '/session/$sessionId/phantom/execute')
-		if paper_format in ['A4','A3','A5','Legal','Letter','Tabloid']:
+			'POST',
+			'/session/$sessionId/phantom/execute'
+		)
+
+		if paper_format in ['A4','A3','A5','Legal','Letter']:
 			page_format = 'this.paperSize = {{ format: \"{}\", orientation: \"{}\" }};'.format(paper_format, orientation)
 		else:
 			paper_format = paper_format.split('X')
@@ -55,30 +58,37 @@ class Utils():
 		self.driver.execute('executePhantomScript', {'script': render, 'args': []})
 		return target_path
 
-	def countPdfPages(self, filename):
-		try:
-			file_stream = file(filename, "rb")
-			return len(re.compile(r"$\s*/Type\s*/Page[/\s]", re.MULTILINE | re.DOTALL).findall(file_stream.read()))
-		finally:
-			file_stream.close()
-
 	def pdfMerge(self, input_files, output_path):
-		merger = PdfFileMerger()
 		try:
-			for input_file in input_files:
-				merger.append(open(input_file, 'rb'))
-
-			with open(output_path, 'wb') as fout:
-				merger.write(fout)
+			subprocess.call(["cpdf", ' '.join(input_files), "-o", output_path])
 
 			return output_path
-		finally:
-			merger.close()
+		except subprocess.CalledProcessError, e:
+			raise OSError(e)
+
+	def pdfScaleToFit(self, input_path, output_path, fit, orientation):
+		try:
+			if fit in ['A4','A3','A5','Legal','Letter']:
+				fit = fit.lower()
+				if fit in ['legal','letter']:
+					fit = "us" + fit
+
+				fit += orientation
+			else:
+				fit = fit.split('X')
+				fit = '{} {}'.format(fit[0], fit[1])
+
+			subprocess.call(["cpdf", "-scale-to-fit", fit, input_path, "-o", output_path])
+
+			return output_path
+		except subprocess.CalledProcessError, e:
+			raise OSError(e)
 
 	def pdfCompress(self, input_path, output_path):
 		try:
 			compressed_path = input_path + '.tmp'
-			subprocess.call(["pdfsizeopt", input_path, compressed_path])
+
+			subprocess.call(["cpdf", "-squeeze", input_path, "-o", compressed_path])
 
 			move(compressed_path, output_path)
 
