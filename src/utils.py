@@ -17,6 +17,8 @@ class Utils():
 			service_args=["--local-storage-path=" + self.paths["localstorage"]]
 		)
 
+		self.driver.implicitly_wait(int(os.getenv('WAIT_BEFORE_PRINT', '0')))
+
 	def multiDownload(self, urls, path, orientation, paper_format):
 		count = 1
 		tmp_files = []
