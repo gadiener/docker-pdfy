@@ -6,7 +6,7 @@
 ### Docker run
 
 ```bash
-$ docker run -p 80:8080 -v ./pdf:/storage --name pdfy -d caffeina/pdfy:1
+$ docker run -p 80:8080 -v /var/www/pdf:/storage --name pdfy -d caffeina/pdfy:1
 ```
 
 ### Docker compose
