@@ -1,6 +1,11 @@
 # PDF Generator Service
 > Dockerized PDF Generator with compression and pages merge features.
 
+## Supported tags and respective `Dockerfile` links
+
+  * [`latest`](https://github.com/gadiener/docker-pdfy/blob/master/Dockerfile) [![](https://images.microbadger.com/badges/image/caffeina/pdfy.svg)](http://microbadger.com/images/wernight/phantomjs "Get your own image badge on microbadger.com")
+  * [`1`, `1.2`, `1.2.0`](https://github.com/gadiener/docker-pdfy/blob/v1.2.0/Dockerfile) [![](https://images.microbadger.com/badges/image/caffeina/pdfy:1.svg)](http://microbadger.com/images/wernight/phantomjs "Get your own image badge on microbadger.com")
+
 ## How to use
 
 ### Docker run
